@@ -20,6 +20,12 @@ const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
+  password: z.string().min(10, {
+    message: "Password must be at least 10 characters.",
+  }),
+  email: z.string().email({
+    message: "Email must be a valid address.",
+  }),
 });
 
 export default function ProfileForm() {
@@ -27,6 +33,8 @@ export default function ProfileForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
+      password: "",
+      email: "",
     },
   });
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -43,10 +51,42 @@ export default function ProfileForm() {
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="username" {...field} />
               </FormControl>
               <FormDescription>
                 This is your public display name.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="Password" {...field} />
+              </FormControl>
+              <FormDescription>
+                Your password must be at least 10 characters long.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="Email" {...field} />
+              </FormControl>
+              <FormDescription>
+                We'll never share your email with anyone else.
               </FormDescription>
               <FormMessage />
             </FormItem>
